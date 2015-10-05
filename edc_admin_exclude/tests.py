@@ -1,11 +1,12 @@
 from django.contrib import admin
+from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.test import TestCase
-from edc_admin_fields.admin import AdminExcludeFieldsMixin
-from django.utils import timezone
-from django.test.utils import override_settings
 from django.test.client import RequestFactory
-from django.core.exceptions import ImproperlyConfigured
+from django.test.utils import override_settings
+from django.utils import timezone
+
+from edc_admin_exclude.admin import AdminExcludeFieldsMixin
 
 
 class Visit(models.Model):
@@ -17,7 +18,7 @@ class Visit(models.Model):
         return self.code
 
     class Meta:
-        app_label = 'edc_admin_fields'
+        app_label = 'edc_admin_exclude'
 
 
 class MyTestModel(models.Model):
@@ -29,7 +30,7 @@ class MyTestModel(models.Model):
     field4 = models.CharField(max_length=25, null=True)
 
     class Meta:
-        app_label = 'edc_admin_fields'
+        app_label = 'edc_admin_exclude'
 
 
 class MyTestModelAdmin(AdminExcludeFieldsMixin, admin.ModelAdmin):

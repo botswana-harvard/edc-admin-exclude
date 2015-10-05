@@ -10,18 +10,18 @@ with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
-    name='edc-admin-fields',
+    name='edc-admin-exclude',
     version='0.1.0dev0',
     author=u'Erik van Widenfelt',
     author_email='ew2789@gmail.com',
     packages=find_packages(),
     include_package_data=True,
-    url='http://github.com/botswana-harvard/edc-admin-fields',
+    url='http://github.com/botswana-harvard/edc-admin-exclude',
     license='GPL licence, see LICENCE',
     description='Change django ModelAdmin fields in realtime.',
     long_description=README,
     zip_safe=False,
-    keywords='django ModelAdmin fields',
+    keywords='django ModelAdmin fields exclude',
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Django',

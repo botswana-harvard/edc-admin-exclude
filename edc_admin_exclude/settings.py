@@ -38,7 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'edc_admin_fields')
+    'edc_admin_exclude')
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -51,7 +51,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
 )
 
-ROOT_URLCONF = 'edc_admin_fields.urls'
+ROOT_URLCONF = 'edc_admin_exclude.urls'
 
 TEMPLATES = [
     {
@@ -69,7 +69,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'edc_admin_fields.wsgi.application'
+WSGI_APPLICATION = 'edc_admin_exclude.wsgi.application'
 
 
 # Database
@@ -103,4 +103,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 GIT_DIR = BASE_DIR.ancestor(1)
-ADMIN_FIELDS_DEFAULT = 'baseline'
+ADMIN_EXCLUDE_DEFAULT_CODE = 'baseline'
