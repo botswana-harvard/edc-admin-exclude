@@ -1,12 +1,12 @@
 language: python
 python:
-#  - "2.7"
+  - "2.7"
 #  - "3.2"
 #  - "3.3"
   - "3.4"
 #  - "nightly"
 env:
-  - DJANGO_VERSION=1.7
+  - DJANGO_VERSION=1.6
   - DJANGO_VERSION=1.8
 
 install:
@@ -16,10 +16,10 @@ install:
   - pip install -q -r requirements.txt --use-mirrors
 
 before_script:
-  - flake8 edc_base
+  - flake8 edc_admin_exclude
 
 script: 
-  - coverage run --source=edc_base manage.py test
+  - coverage run --source=edc_admin_exclude manage.py test
 
 after_success:
   - coveralls
