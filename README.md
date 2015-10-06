@@ -1,5 +1,6 @@
 # edc-admin-exclude
 
+
 Change the ModelAdmin fields in realtime by specifying a dictionary of "exclude" lists.
 
 A ModelForm may need to change in a longitudunal survey by adding or excluding fields based on the timepoint.
@@ -73,3 +74,5 @@ You can add instructions to the top of each form. First override the `change_for
 		<p><i>{{ required_instructions|safe }}</i></p>
 	{% endblock %}
 
+## TODO
+Workout dependency to edc_base model admin and in a admin template

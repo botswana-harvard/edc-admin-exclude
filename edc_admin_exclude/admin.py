@@ -46,16 +46,19 @@ class AdminExcludeFieldsMixin(object):
         return extra_context
 
     def get_form(self, request, obj=None, **kwargs):
+        """Returns a form but customizes the fields list first."""
         visit_code = self.get_visit_code(request, obj)
         self.fields = self.get_custom_fields(request, obj, visit_code=visit_code)
         kwargs.update({'fields': self.fields, 'exclude': self.get_custom_exclude(request, obj)})
         return super(AdminExcludeFieldsMixin, self).get_form(request, obj, **kwargs)
 
     def get_fields(self, request, obj=None):
+        """Returns fields but sets the fields attr before calling super."""
         self.fields = self.get_custom_fields(request, obj)
         return super(AdminExcludeFieldsMixin, self).get_fields(request, obj)
 
     def get_custom_fields(self, request, obj=None, visit_code=None):
+        """Returns a list of field names less those to be excluded for the \'visit\' or None."""
         if self.original_fields:
             visit_code = visit_code or self.get_visit_code(request, obj)
             return list([f for f in self.original_fields if f not in self.get_custom_exclude(
@@ -74,6 +77,7 @@ class AdminExcludeFieldsMixin(object):
         return list(exclude)
 
     def get_custom_instructions(self, key):
+        """Returns instructions for this \'key\' as a list."""
         try:
             instructions = self.original_instructions.get(key)
         except KeyError:
@@ -83,7 +87,7 @@ class AdminExcludeFieldsMixin(object):
         return instructions
 
     def get_visit_code(self, request, obj=None, object_id=None):
-        """Returns the visit code for the instance, settings or None."""
+        """Returns the visit code from the instance or settings attr or returns None."""
         try:
             visit_code = self.get_visit(request, obj=obj, object_id=object_id).get_visit_code()
         except AttributeError:
