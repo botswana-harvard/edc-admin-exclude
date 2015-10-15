@@ -74,17 +74,17 @@ class TestAdminFields(TestCase):
         visit = Visit.objects.create(code='T1')
         MyTestModel.objects.create(visit=visit)
         request = RequestFactory()
-        request.GET = {'visit': visit}
+        request.GET = {'visit': visit.pk}
         form = self.model_admin.get_form(request)
-        self.assertEqual(form.base_fields.keys(), ['field1', 'field2', 'field4'])
+        self.assertEqual(list(form.base_fields.keys()), ['field1', 'field2', 'field4'])
 
     def test_set_fields_by_visit_code2(self):
         visit = Visit.objects.create(code='T0')
         MyTestModel.objects.create(visit=visit)
         request = RequestFactory()
-        request.GET = {'visit': visit}
+        request.GET = {'visit': visit.pk}
         form = self.model_admin.get_form(request)
-        self.assertEqual(form.base_fields.keys(), ['field1', 'field2', 'field3', 'field4'])
+        self.assertEqual(list(form.base_fields.keys()), ['field1', 'field2', 'field3', 'field4'])
 
     @override_settings(ADMIN_EXCLUDE_DEFAULT_CODE='T1')
     def test_set_fields_by_visit_code3(self):
@@ -93,7 +93,7 @@ class TestAdminFields(TestCase):
         request = RequestFactory()
         request.GET = {'visit': None}
         form = self.model_admin.get_form(request)
-        self.assertEqual(form.base_fields.keys(), ['field1', 'field2', 'field4'])
+        self.assertEqual(list(form.base_fields.keys()), ['field1', 'field2', 'field4'])
 
     @override_settings(ADMIN_EXCLUDE_DEFAULT_CODE='T0')
     def test_set_fields_by_visit_code4(self):
@@ -102,10 +102,10 @@ class TestAdminFields(TestCase):
         request = RequestFactory()
         request.GET = {'visit': None}
         form = self.model_admin.get_form(request)
-        self.assertEqual(form.base_fields.keys(), ['field1', 'field2', 'field3', 'field4'])
+        self.assertEqual(list(form.base_fields.keys()), ['field1', 'field2', 'field3', 'field4'])
 
     @override_settings(ADMIN_EXCLUDE_DEFAULT_CODE='T0')
     def test_set_fields_by_visit_code5(self):
         request = RequestFactory()
         form = self.model_admin.get_form(request)
-        self.assertEqual(form.base_fields.keys(), ['field1', 'field2', 'field3', 'field4'])
+        self.assertEqual(list(form.base_fields.keys()), ['field1', 'field2', 'field3', 'field4'])
