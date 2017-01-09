@@ -2,15 +2,15 @@ from django.conf import settings
 from copy import copy
 from django.core.exceptions import ImproperlyConfigured
 
-
-class AdminExcludeFieldsMixin:
+from django.contrib import admin
+class AdminExcludeFieldsMixin(admin.ModelAdmin):
 
     """Declare with edc_visit tracking CrfModelMixin."""
 
     visit_codes = {}
 
     def __init__(self, *args, **kwargs):
-        super(AdminExcludeFieldsMixin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self._original_fields = None
         try:
             self.original_instructions = copy(self.instructions)
