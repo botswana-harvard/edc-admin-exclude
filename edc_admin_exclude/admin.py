@@ -3,38 +3,38 @@ from copy import copy
 from django.core.exceptions import ImproperlyConfigured
 
 
-class AdminExcludeFieldsMixin(object):
+class AdminExcludeFieldsMixin:
 
-    visit_model = None
-    visit_attr = None
+    """Declare with edc_visit tracking CrfModelMixin."""
+
     visit_codes = {}
 
     def __init__(self, *args, **kwargs):
         super(AdminExcludeFieldsMixin, self).__init__(*args, **kwargs)
-        self.original_fields = list(copy(self.fields))
+        self._original_fields = None
         try:
             self.original_instructions = copy(self.instructions)
         except AttributeError:
             self.original_instructions = None
-        try:
-            exclude = self.custom_exclude.values()
-            for fields in exclude:
-                unknown_fields = [f for f in fields if f not in self.original_fields]
-                if unknown_fields:
-                    raise ImproperlyConfigured(
-                        'Custom exclude field(s) {} not found in ModelAdmin.field list. '
-                        'See \'{}\''.format(unknown_fields, self.__class__.__name__))
-        except AttributeError:
-            pass
-        if not self.visit_model:
-            raise ImproperlyConfigured(
-                'Attribute visit_model may not be None. Declare as a class attribute on the ModelAdmin')
-        if not self.visit_attr:
-            raise ImproperlyConfigured(
-                'Attribute visit_attr may not be None. Declare as a class attribute on the ModelAdmin')
         if not self.visit_codes:
             raise ImproperlyConfigured(
                 'Attribute visit_codes may not be None. Declare as a class attribute on the ModelAdmin')
+
+    @property
+    def original_fields(self):
+        if not self._original_fields:
+            self._original_fields = list(copy(self.fields))
+            try:
+                exclude = self.custom_exclude.values()
+                for fields in exclude:
+                    unknown_fields = [f for f in fields if f not in self.original_fields]
+                    if unknown_fields:
+                        raise ImproperlyConfigured(
+                            'Custom exclude field(s) {} not found in ModelAdmin.field list. '
+                            'See \'{}\''.format(unknown_fields, self.__class__.__name__))
+            except AttributeError:
+                pass
+        return self._original_fields
 
     def contribute_to_extra_context(self, extra_context, request=None, object_id=None):
         extra_context = super(AdminExcludeFieldsMixin, self).contribute_to_extra_context(
@@ -102,11 +102,11 @@ class AdminExcludeFieldsMixin(object):
         visit_instance = None
         try:
             if obj:
-                visit_instance = getattr(obj, self.visit_attr)
+                visit_instance = getattr(obj, self.visit_model_attr)
             elif object_id:
                 visit_instance = self.model.objects.get(pk=object_id)
             else:
-                pk = request.GET.get(self.visit_attr)
+                pk = request.GET.get(self.visit_model_attr)
                 if pk:
                     visit_instance = self.visit_model.objects.get(pk=pk)
         except AttributeError:
